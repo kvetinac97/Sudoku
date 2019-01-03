@@ -1,0 +1,687 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SudokuSharp</name>
+    </assembly>
+    <members>
+        <member name="T:SudokuSharp.Board">
+            <summary>
+            The basic Sudoku class.
+            It contains a grid of cells with values of 0-9; 0 corresponds to an empty cell, and the other digits the possible values.
+            </summary>
+        </member>
+        <member name="P:SudokuSharp.Board.Cut">
+            <summary>
+            Hack to allow a namespace inside a class. Allows access to the Cut functions.
+            </summary>
+        </member>
+        <member name="T:SudokuSharp.Board._CutClass">
+            <summary>
+            Hack to allow a namespace inside a class.
+            </summary>
+        </member>
+        <member name="M:SudokuSharp.Board._CutClass.#ctor(SudokuSharp.Board)">
+            <summary>
+            Hack to allow a namespace inside a class.
+            </summary>
+        </member>
+        <member name="M:SudokuSharp.Board._CutClass.Quad(System.Random)">
+            <summary>
+            Attempts to cut 4 locations from the current board, mirrored about both horizontal and vertical axes.
+            </summary>
+            <param name="Stream">An existing <see cref="T:System.Random"/> number generator</param>
+            <returns>If the result has a unique solution, then the new <see cref="T:SudokuSharp.Board"/>. Otherwise, the original</returns>
+        </member>
+        <member name="M:SudokuSharp.Board._CutClass.Pair(System.Random)">
+            <summary>
+            Attempts to cut 2 locations from the current board, mirrored about a randomly chosen axis.
+            </summary>
+            <param name="Stream">An existing <see cref="T:System.Random"/> number generator</param>
+            <returns>If the result has a unique solution, then the new <see cref="T:SudokuSharp.Board"/>. Otherwise, the original</returns>
+        </member>
+        <member name="M:SudokuSharp.Board._CutClass.Single(System.Random)">
+            <summary>
+            Attempts to cut a single location
+            </summary>
+            <param name="Stream">An existing <see cref="T:System.Random"/> number generator</param>
+            <returns>If the result has a unique solution, then the new <see cref="T:SudokuSharp.Board"/>. Otherwise, the original</returns>
+        </member>
+        <member name="M:SudokuSharp.Board._CutClass.AllSingles">
+            <summary>
+            Tries each filled location, in order. If the result has more than one solution, it is filled back in
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SudokuSharp.Board._CutClass.AllSingles(System.Random)">
+            <summary>
+            Tries to cut each filled location, in random order. If the result has more than one solution, it is filled back in
+            </summary>
+            <param name="Stream"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SudokuSharp.Board._FillClass">
+            <summary>
+            Hack to allow a namespace inside a class.
+            </summary>
+        </member>
+        <member name="M:SudokuSharp.Board._FillClass.Sequential">
+            <summary>
+            Attempts to fill the calling <see cref="T:SudokuSharp.Board"/> instance with numbers.
+            The original instance remains unchanged
+            </summary>
+            <returns>Either a new instance of <see cref="T:SudokuSharp.Board"/> or, if unsuccessful, null</returns>
+        </member>
+        <member name="M:SudokuSharp.Board._FillClass.#ctor(SudokuSharp.Board)">
+            <summary>
+            Hack to allow a namespace inside a class.
+            </summary>
+        </member>
+        <member name="M:SudokuSharp.Board._FillClass.Randomized">
+            <summary>
+            Attempts to fill the calling <see cref="T:SudokuSharp.Board"/> instance with numbers.
+            The original instance remains unchanged
+            </summary>
+            <returns>Either a new instance of <see cref="T:SudokuSharp.Board"/> or, if unsuccessful, null</returns>
+        </member>
+        <member name="M:SudokuSharp.Board._FillClass.Randomized(System.Int32)">
+            <summary>
+            Attempts to fill the calling <see cref="T:SudokuSharp.Board"/> instance with numbers.
+            The original instance remains unchanged
+            </summary>
+            <param name="Seed">An integer Seed value for the random number generator</param>
+            <returns>Either a new instance of <see cref="T:SudokuSharp.Board"/> or, if unsuccessful, null</returns>
+        </member>
+        <member name="M:SudokuSharp.Board._FillClass.Randomized(System.Random)">
+            <summary>
+            Attempts to fill the calling <see cref="T:SudokuSharp.Board"/> instance with numbers.
+            The original instance remains unchanged
+            </summary>
+            <param name="Stream">If you already have a <see cref="T:System.Random"/> stream, you may provide it here</param>
+            <returns>Either a new instance of <see cref="T:SudokuSharp.Board"/> or, if unsuccessful, null</returns>
+        </member>
+        <member name="P:SudokuSharp.Board.Fill">
+            <summary>
+            Hack to allow a namespace inside a class. Allows access to the Fill functions.
+            </summary>
+        </member>
+        <member name="P:SudokuSharp.Board.Find">
+            <summary>
+            Hack to allow a namespace inside a class. Allows access to the Find functions.
+            </summary>
+        </member>
+        <member name="T:SudokuSharp.Board._FindClass">
+            <summary>
+            Hack to allow a namespace inside a class.
+            </summary>
+        </member>
+        <member name="M:SudokuSharp.Board._FindClass.#ctor(SudokuSharp.Board)">
+            <summary>
+            Hack to allow a namespace inside a class.
+            </summary>
+        </member>
+        <member name="M:SudokuSharp.Board._FindClass.EmptyLocations">
+            <summary>
+            Every location of the calling <see cref="T:SudokuSharp.Board"/> instance with no cell value
+            </summary>
+            <returns><see cref="T:System.Collections.Generic.IEnumerable`1"/></returns>
+        </member>
+        <member name="M:SudokuSharp.Board._FindClass.FilledLocations">
+            <summary>
+            Every location of the calling <see cref="T:SudokuSharp.Board"/> instance with a cell value filled
+            </summary>
+            <returns><see cref="T:System.Collections.Generic.IEnumerable`1"/></returns>
+        </member>
+        <member name="M:SudokuSharp.Board._FindClass.Candidates(SudokuSharp.Location)">
+            <summary>
+            Returns every digit which may be placed in the calling <see cref="T:SudokuSharp.Board"/> instance at the specified <see cref="T:SudokuSharp.Location"/>
+            </summary>
+            <param name="Where">The <see cref="T:SudokuSharp.Location"/> to check</param>
+            <returns><see cref="T:System.Collections.Generic.List`1"/></returns>
+        </member>
+        <member name="M:SudokuSharp.Board._FindClass.AllCandidates">
+            <summary>
+            For convenience, returns a container of every empty location with the candidates for that location
+            </summary>
+            <returns><see cref="T:System.Collections.Generic.Dictionary`2"/></returns>
+        </member>
+        <member name="M:SudokuSharp.Board._FindClass.LockedCandidates">
+            <summary>
+            Looks for candidates in zones which are restricted to a specific column or row.
+            Removes those candidates from that column or row in other zones, and checks for cells which may be solved
+            </summary>
+            <returns>A set of <see cref="T:System.Collections.Generic.KeyValuePair`2"/> items</returns>
+        </member>
+        <member name="M:SudokuSharp.Board._FindClass.NakedSingles">
+            <summary>
+            Looks for Naked Singles. These are cells with only a single candidate
+            </summary>
+            <returns>A set of <see cref="T:System.Collections.Generic.KeyValuePair`2"/> items</returns>
+        </member>
+        <member name="M:SudokuSharp.Board._FindClass.NakedSingles(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{SudokuSharp.Location,System.Collections.Generic.List{System.Int32}}})">
+            <summary>
+            Looks for Naked Singles. These are cells with only a single candidate.
+            This version is intended to be called by other reducing functions (such as LockedCandidates)
+            </summary>
+            <param name="Possibilities">A set of candidates</param>
+            <returns>A set of <see cref="T:System.Collections.Generic.KeyValuePair`2"/> items</returns>
+        </member>
+        <member name="M:SudokuSharp.Board._FindClass.HiddenSingles">
+            <summary>
+            Looks for Hidden Singles. These are digits which may only be placed in one cell within a row, column, or zone
+            </summary>
+            <returns>A set of <see cref="T:System.Collections.Generic.KeyValuePair`2"/> items</returns>
+        </member>
+        <member name="M:SudokuSharp.Board._FindClass.HiddenSingles(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{SudokuSharp.Location,System.Collections.Generic.List{System.Int32}}})">
+            <summary>
+            Looks for Hidden Singles. These are digits which may only be placed in one cell within a row, column, or zone
+            This version is intended to be called by other reducing functions (such as LockedCandidates)
+            </summary>
+            <param name="Possibilities">A set of candidates</param>
+            <returns>A set of <see cref="T:System.Collections.Generic.KeyValuePair`2"/> items</returns>
+        </member>
+        <member name="M:SudokuSharp.Board._FindClass.AllSingles">
+            <summary>
+            Returns a the results of both Naked Singles and Hidden Singles
+            </summary>
+            <returns>A set of <see cref="T:System.Collections.Generic.KeyValuePair`2"/> items</returns>
+        </member>
+        <member name="M:SudokuSharp.Board._FindClass.AllSingles(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{SudokuSharp.Location,System.Collections.Generic.List{System.Int32}}})">
+            <summary>
+            Returns a the results of both Naked Singles and Hidden Singles
+            This version is intended to be called by other reducing functions (such as LockedCandidates)
+            </summary>
+            <param name="Possibilities">A set of candidates</param>
+            <returns>A set of <see cref="T:System.Collections.Generic.KeyValuePair`2"/> items</returns>
+        </member>
+        <member name="P:SudokuSharp.Board.IsSolved">
+            <summary>
+            Returns whether or not the particular puzzle is solved.
+            </summary>
+            <value>
+              <c>true</c> if this instance is solved; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:SudokuSharp.Board.IsValid">
+            <summary>
+            Returns whether this particular puzzle MAY be solved.
+            
+            Certain conditions are known to invalidate a puzzle, preventing the existence of a unique solution. This checks for those conditions.
+            </summary>
+            <value>
+              <c>true</c> if this instance is valid; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="M:SudokuSharp.Board.ExistsUniqueSolution">
+            <summary>
+            Verifies the existance of a unique solution
+            </summary>
+            <value>
+            <c>true</c> if [a unique solution exists]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="M:SudokuSharp.Board.CountSolutions">
+            <summary>
+            Attempts to count all possible solutions
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SudokuSharp.Board.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:SudokuSharp.Board"/> class, completely blank (ie every cell <see cref="T:SudokuSharp.Location"/> is empty).
+            </summary>
+        </member>
+        <member name="M:SudokuSharp.Board.#ctor(SudokuSharp.Board)">
+            <summary>
+            Copies an instance of the <see cref="T:SudokuSharp.Board"/> class.
+            </summary>
+            <param name="src">The source.</param>
+        </member>
+        <member name="M:SudokuSharp.Board.GetCell(SudokuSharp.Location)">
+            <summary>
+            Gets the value of a given cell.
+            </summary>
+            <param name="Where">The cell to check; may be provided as either an instance of <see cref="T:SudokuSharp.Location"/> or the integer index of the cell.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SudokuSharp.Board.PutCell(SudokuSharp.Location,System.Int32)">
+            <summary>
+            Fills a cell in.
+            </summary>
+            <param name="Where">The <see cref="T:SudokuSharp.Location"/> of the cell to fill.</param>
+            <param name="value">The value to place; 0 for clear, or 1-9.</param>
+        </member>
+        <member name="P:SudokuSharp.Board.Item(SudokuSharp.Location)">
+            <summary>
+            Overrides array indexing (suare brackets []) for accessing locations in the Grid.
+            Essentially, it's another way to access GetCell and PutCell.
+            
+            You may use
+              <see cref="T:SudokuSharp.Location"/> where = new <see cref="T:SudokuSharp.Location"/>(x,y);
+              <see cref="T:System.Int32"/> result = myGrid[where];
+              myGrid[where] = result;
+            </summary>
+            <value>
+            The <see cref="T:System.Int32"/> representing the value of the cell (0 for empty, 1-9 for a value).
+            </value>
+            <param name="where">The <see cref="T:SudokuSharp.Location"/> to access.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SudokuSharp.Board.ToString">
+            <summary>
+            Provides a pretty string representation of the Board instance.
+            3x3 blocks have one empty column and row between them, and empty cells are represented as '-'
+            The resulting string is then 11x11 when printed on a terminal
+            </summary>
+            <returns>A <see cref="T:System.String"/> value.</returns>
+        </member>
+        <member name="T:SudokuSharp.Examples.CellType">
+            <summary>
+            <see cref="T:SudokuSharp.Examples.CellType"/>s are used to define how a cell on a Sudoku board was filled in.
+            Possible values are Empty, Solution, or Guess.
+            </summary>
+        </member>
+        <member name="F:SudokuSharp.Examples.CellType.Empty">
+            <summary>
+            The Empty value represents a cell which is blank.
+            </summary>
+        </member>
+        <member name="F:SudokuSharp.Examples.CellType.Given">
+            <summary>
+            The Given value represents a cell which is filled in at the start of the puzzle. In some terminologies this is called a Hint.
+            </summary>
+        </member>
+        <member name="F:SudokuSharp.Examples.CellType.Guess">
+            <summary>
+            The Guess value represents a cell which was filled in by the user. This may or may not be the correct value for the cell.
+            </summary>
+        </member>
+        <member name="T:SudokuSharp.Examples.Cell">
+            <summary>
+            The <see cref="T:SudokuSharp.Examples.Cell"/> is returned by the Puzzle class. It contains useful information about every location in a Sudoku game, including:
+            </summary>
+        </member>
+        <member name="M:SudokuSharp.Examples.Cell.#ctor(SudokuSharp.Location,SudokuSharp.Examples.CellType,System.Int32,System.Boolean[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:SudokuSharp.Examples.Cell"/> class.
+            </summary>
+            <param name="Where">The <see cref="T:SudokuSharp.Location"/>.</param>
+            <param name="Type">The <see cref="T:SudokuSharp.Examples.CellType"/>.</param>
+            <param name="Value">The number that is there.</param>
+            <param name="Pencils">A <see cref="T:System.Boolean"/> array of values representing the pencil marks; true for present, false for clear.
+            Note that the array contains values for 0-9 even though a pencil mark for 0 (clear) doesn't make sense. This just makes the handling easier.</param>
+        </member>
+        <member name="F:SudokuSharp.Examples.Cell.Where">
+            <summary>
+            The <see cref="T:SudokuSharp.Location"/> of the <see cref="T:SudokuSharp.Examples.Cell"/>.
+            </summary>
+        </member>
+        <member name="F:SudokuSharp.Examples.Cell.Value">
+            <summary>
+            The number placed in the <see cref="T:SudokuSharp.Examples.Cell"/>.
+            </summary>
+        </member>
+        <member name="F:SudokuSharp.Examples.Cell.Type">
+            <summary>
+            The <see cref="T:SudokuSharp.Examples.CellType"/> of the cell.
+            </summary>
+        </member>
+        <member name="P:SudokuSharp.Examples.Cell.PencilMarks">
+            <summary>
+            Gets a <see cref="T:System.Boolean"/> array of the pencil marks.
+            </summary>
+            <value>
+            An array of 10 <see cref="T:System.Boolean"/> values, for the numbers 0-9. True indicates the presence of a pencil mark, false indicates clear.
+            In many Sudoku games, these marks indicate whether a number MAY be placed in the cell.
+            </value>
+        </member>
+        <member name="T:SudokuSharp.Examples.History.Guess">
+            <summary>
+            A <see cref="T:SudokuSharp.Examples.History.Guess"/> is a number placed on the board by the user. It may or may not be correct.
+            This class implements <see cref="T:SudokuSharp.Examples.History.IHistoryAction"/> for use in undo/redo lists.
+            </summary>
+        </member>
+        <member name="M:SudokuSharp.Examples.History.Guess.#ctor(SudokuSharp.Board,SudokuSharp.Location,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SudokuSharp.Examples.History.Guess"/> class.
+            </summary>
+            <param name="Target">The board being played.</param>
+            <param name="Where">The <see cref="T:SudokuSharp.Location"/> of the guess.</param>
+            <param name="Value">The number to place.</param>
+        </member>
+        <member name="M:SudokuSharp.Examples.History.Guess.Apply">
+            <summary>
+            Performs this action.
+            Inherited from <see cref="T:SudokuSharp.Examples.History.IHistoryAction"/>.
+            </summary>
+        </member>
+        <member name="M:SudokuSharp.Examples.History.Guess.Undo">
+            <summary>
+            Undoes this instance, returning the target <see cref="T:SudokuSharp.Board"/> to its prior state.
+            Inherited from <see cref="T:SudokuSharp.Examples.History.IHistoryAction"/>
+            </summary>
+        </member>
+        <member name="T:SudokuSharp.Examples.History.IHistoryAction">
+            <summary>
+            This interface is used in the Undo / Redo lists of the Puzzle class.
+            </summary>
+        </member>
+        <member name="M:SudokuSharp.Examples.History.IHistoryAction.Apply">
+            <summary>
+            Applies this instance.
+            </summary>
+        </member>
+        <member name="M:SudokuSharp.Examples.History.IHistoryAction.Undo">
+            <summary>
+            Undoes this instance.
+            </summary>
+        </member>
+        <member name="T:SudokuSharp.Examples.PencilGrid">
+            <summary>
+            A grid for keeping track of all the pencil marks.
+            Many players will mark in a cell the values that may be placed there; this is represented by an array of <see cref="T:System.Boolean"/> values for every <see cref="T:SudokuSharp.Location"/> on the board.
+            </summary>
+        </member>
+        <member name="M:SudokuSharp.Examples.PencilGrid.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:SudokuSharp.Examples.PencilGrid"/> class with all fields blank.
+            </summary>
+        </member>
+        <member name="M:SudokuSharp.Examples.PencilGrid.#ctor(SudokuSharp.Board)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SudokuSharp.Examples.PencilGrid"/> class, with pencil marks for everywhere a number is a candidate.
+            </summary>
+            <param name="src">The <see cref="T:SudokuSharp.Board"/> to work off of.</param>
+        </member>
+        <member name="M:SudokuSharp.Examples.PencilGrid.Get(SudokuSharp.Location,System.Int32)">
+            <summary>
+            Returns whether a pencil mark is present.
+            </summary>
+            <param name="where">The <see cref="T:SudokuSharp.Location"/> to check.</param>
+            <param name="value">The number to check.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SudokuSharp.Examples.PencilGrid.Set(SudokuSharp.Location,System.Int32)">
+            <summary>
+            Sets a pencil mark.
+            </summary>
+            <param name="where">The <see cref="T:SudokuSharp.Location"/> to set.</param>
+            <param name="value">The number to set.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SudokuSharp.Examples.PencilGrid.Clear(SudokuSharp.Location,System.Int32)">
+            <summary>
+            Clears the specified pencil mark.
+            </summary>
+            <param name="where">The <see cref="T:SudokuSharp.Location"/> to clear.</param>
+            <param name="value">The number to clear.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SudokuSharp.Examples.PencilGrid.Toggle(SudokuSharp.Location,System.Int32)">
+            <summary>
+            Toggles the specified pencil mark.
+            </summary>
+            <param name="where">The <see cref="T:SudokuSharp.Location"/> to toggle.</param>
+            <param name="value">The number to toggle.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SudokuSharp.Examples.PencilGrid.GetMarks(SudokuSharp.Location)">
+            <summary>
+            Returns an array of all the pencil marks at a given <see cref="T:SudokuSharp.Location"/>.
+            It is an array of 10 booleans, so you may access it using 1-9 for the given cell values.
+            (I know, it doesn't make sense to have a pencil mark for 0, just ignore that index)
+            </summary>
+            <param name="where">The <see cref="T:SudokuSharp.Location"/>.</param>
+            <returns></returns>
+        </member>
+        <member name="T:SudokuSharp.Examples.Puzzle">
+            <summary>
+            The composite <see cref="T:SudokuSharp.Examples.Puzzle"/> class is an example of a higher-level Sudoku board.
+            
+            If you are building a Sudoku application and wish to have as much functionality as possible provided, use this class.
+            </summary>
+        </member>
+        <member name="M:SudokuSharp.Examples.Puzzle.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="M:SudokuSharp.Examples.Puzzle.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SudokuSharp.Examples.Puzzle"/> class.
+            
+            The solution and givens are both generated using the same random seed.
+            </summary>
+            <param name="Seed">The random seed to use.</param>
+        </member>
+        <member name="M:SudokuSharp.Examples.Puzzle.#ctor(SudokuSharp.Board,SudokuSharp.Board)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SudokuSharp.Examples.Puzzle"/> class, using the supplied solution and givens.
+            </summary>
+            <param name="Solution">A <see cref="T:SudokuSharp.Board"/> representing the solved puzzle.</param>
+            <param name="Givens">A <see cref="T:SudokuSharp.Board"/> representing the initial state of the puzzle.</param>
+        </member>
+        <member name="M:SudokuSharp.Examples.Puzzle.GetCell(SudokuSharp.Location)">
+            <summary>
+            Returns a <see cref="T:SudokuSharp.Examples.CellType"/> with relevant information about that <see cref="T:SudokuSharp.Location"/> on the board.
+            </summary>
+            <param name="Where">The <see cref="T:SudokuSharp.Location"/>.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SudokuSharp.Examples.Puzzle.PutCell(SudokuSharp.Location,System.Int32)">
+            <summary>
+            Fills a cell in.
+            It also creates a step in the Undo list.
+            If the <see cref="P:SudokuSharp.Examples.Puzzle.AutoPencilMarkClearing"/> property is <c>true</c>, then the corresponding Pencil Marks are also cleared (and the step in the Undo list
+            will contain the necessary information to restore them if necessary).
+            </summary>
+            <param name="Where">The where.</param>
+            <param name="Value">The value.</param>
+        </member>
+        <member name="M:SudokuSharp.Examples.Puzzle.IsSolved">
+            <summary>
+            Checks if the entire puzzle is solved
+            </summary>
+            <returns>True or False</returns>
+        </member>
+        <member name="M:SudokuSharp.Examples.Puzzle.TogglePencil(SudokuSharp.Location,System.Int32)">
+            <summary>
+            Toggles a pencil mark.
+            It also creates an undo step in the history.
+            </summary>
+            <param name="where">The location to mark</param>
+            <param name="value">The number to mark</param>
+        </member>
+        <member name="M:SudokuSharp.Examples.Puzzle.IsCorrect(SudokuSharp.Location)">
+            <summary>
+            Determines whether the specified cell matches the solution.
+            </summary>
+            <param name="Where">The <see cref="T:SudokuSharp.Location"/> to check.</param>
+            <returns></returns>
+        </member>
+        <member name="M:SudokuSharp.Examples.Puzzle.Undo">
+            <summary>
+            Undoes one step of actions, and moves that step to the Redo stack.
+            </summary>
+        </member>
+        <member name="M:SudokuSharp.Examples.Puzzle.Redo">
+            <summary>
+            Redoes one step of actions, and moves that step back to the Undo stack.
+            </summary>
+        </member>
+        <member name="P:SudokuSharp.Examples.Puzzle.AutoPencilMarkClearing">
+            <summary>
+            Indicates whether conflicting pencil marks should be automatically cleared when placing values in cells.
+            </summary>
+            <value>
+            <c>true</c> if [automatic pencil mark clearing]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:SudokuSharp.Factory">
+            <summary>
+            Provides functions for generating games
+            </summary>
+        </member>
+        <member name="M:SudokuSharp.Factory.Solution(System.Int32)">
+            <summary>
+            Provides a completely filled, randomly generated, Sudoku <see cref="T:SudokuSharp.Board"/>
+            </summary>
+            <param name="Seed">An integer seed for the random number generator</param>
+            <returns><see cref="T:SudokuSharp.Board"/></returns>
+        </member>
+        <member name="M:SudokuSharp.Factory.Solution(System.Random)">
+            <summary>
+            Provides a completely filled, randomly generated, Sudoku <see cref="T:SudokuSharp.Board"/>
+            </summary>
+            <param name="Stream">An existing <see cref="T:System.Random"/> number generator</param>
+            <returns><see cref="T:SudokuSharp.Board"/></returns>
+        </member>
+        <member name="M:SudokuSharp.Factory.Puzzle(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            First calls <see cref="M:SudokuSharp.Factory.Solution(System.Int32)"/> with the provided Seed, then calls Cut.Quad, .Pair, and .Single the specified number of times
+            </summary>
+            <param name="Seed">An integer seed for the <see cref="T:System.Random"/> number generator</param>
+            <param name="QuadsToCut">The number of times to call Cut.Quad</param>
+            <param name="PairsToCut">The number of times to call Cut.Pair</param>
+            <param name="SinglesToCut">The number of times to call Cut.Single</param>
+            <returns></returns>
+        </member>
+        <member name="M:SudokuSharp.Factory.Puzzle(SudokuSharp.Board,System.Random,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Calls Cut.Quad, .Pair, and .Single the specified number of times on the provided <see cref="T:SudokuSharp.Board"/>
+            </summary>
+            <param name="Source">The <see cref="T:SudokuSharp.Board"/> to be modified</param>
+            <param name="Stream">An existing <see cref="T:System.Random"/> number generator</param>
+            <param name="QuadsToCut">The number of times to call Cut.Quad</param>
+            <param name="PairsToCut">The number of times to call Cut.Pair</param>
+            <param name="SinglesToCut">The number of times to call Cut.Single</param>
+            <returns></returns>
+        </member>
+        <member name="T:SudokuSharp.Location">
+            <summary>
+            The Location class is a reference to a specific cell on a Sudoku board.
+            It is internally represented as an integer for performance, but contains many useful methods
+            </summary>
+        </member>
+        <member name="M:SudokuSharp.Location.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SudokuSharp.Location"/> class.
+            </summary>
+            <param name="idx">The cell <see cref="F:SudokuSharp.Location.Index"/>.</param>
+        </member>
+        <member name="M:SudokuSharp.Location.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:SudokuSharp.Location"/> class. Instead of specifying the index of the cell, you may specify the row and column to use.
+            The parameters are specified in Column, Row order to match the X,Y convention.
+            </summary>
+            <param name="Column">The column.</param>
+            <param name="Row">The row.</param>
+        </member>
+        <member name="M:SudokuSharp.Location.op_Implicit(System.Int32)~SudokuSharp.Location">
+            <summary>
+            Performs an implicit conversion from <see cref="T:System.Int32"/> to <see cref="T:SudokuSharp.Location"/>.
+            </summary>
+            <param name="index">The cell <see cref="F:SudokuSharp.Location.Index"/>.</param>
+            <returns>
+            A new <see cref="T:SudokuSharp.Location"/>.
+            </returns>
+        </member>
+        <member name="M:SudokuSharp.Location.op_Implicit(SudokuSharp.Location)~System.Int32">
+            <summary>
+            Performs an implicit conversion from <see cref="T:SudokuSharp.Location"/> to <see cref="T:System.Int32"/>.
+            </summary>
+            <param name="Where">The <see cref="T:SudokuSharp.Location"/> to be cast.</param>
+            <returns>
+            The location Index, as an integer
+            </returns>
+        </member>
+        <member name="P:SudokuSharp.Location.Row">
+            <summary>
+            Returns the Row of the specified <see cref="T:SudokuSharp.Location"/>.
+            </summary>
+            <value>
+            The row of the specified <see cref="T:SudokuSharp.Location"/>.
+            </value>
+        </member>
+        <member name="P:SudokuSharp.Location.Column">
+            <summary>
+            Gets the column of the specified <see cref="T:SudokuSharp.Location"/>.
+            </summary>
+            <value>
+            The column of the specified <see cref="T:SudokuSharp.Location"/>.
+            </value>
+        </member>
+        <member name="P:SudokuSharp.Location.Zone">
+            <summary>
+            Gets the zone of the specified <see cref="T:SudokuSharp.Location"/>.
+            </summary>
+            <value>
+            The zone of the specified <see cref="T:SudokuSharp.Location"/>.
+            The Zone is the 3x3 block to which the location belongs; there are nine of them on the Sudoku board and, together with each Row and Column, the Zone when solved will contain a single instance of each digit.
+            </value>
+        </member>
+        <member name="M:SudokuSharp.Location.FlipHorizontal">
+            <summary>
+            Returns the corresponding <see cref="T:SudokuSharp.Location"/> flipped horizontally (same Row, different Column)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SudokuSharp.Location.FlipVertical">
+            <summary>
+            Returns the corresponding <see cref="T:SudokuSharp.Location"/> flipped vertically (same Column, different Row)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:SudokuSharp.Location.Index">
+            <summary>
+            Gets the index.
+            </summary>
+            <value>
+            Indices are ordered beginning at 0 (the upper left corner), and running horizontally, and continuing on the following line.
+            For example, the first row is numbered 0,1,2... while the second row is numbered 9,10,11...
+            The lower right-hand corner is numbered 80.
+            </value>
+        </member>
+        <member name="P:SudokuSharp.Location.All">
+            <summary>
+            Gets a collection of all indices, which may be iterated via foreach
+            </summary>
+            <value>
+            The ReadOnlyCollection of all indices.
+            </value>
+        </member>
+        <member name="P:SudokuSharp.Location.Blocking">
+            <summary>
+            Gets the cells which may cause conflicts with this one.
+            </summary>
+            <returns>An <see cref="T:System.Int32"/>[] array of all the indices in the current row, column, or zone. These are the only cells which may conflict with this cell.</returns>
+        </member>
+        <member name="M:SudokuSharp.Location.IsSameRow(SudokuSharp.Location)">
+            <summary>
+            Determines whether [is same row] [the specified <see cref="T:SudokuSharp.Location"/> CompareTo].
+            </summary>
+            <param name="CompareTo">The <see cref="T:SudokuSharp.Location"/> to be compared.</param>
+            <returns>True or False</returns>
+        </member>
+        <member name="M:SudokuSharp.Location.IsSameColumn(SudokuSharp.Location)">
+            <summary>
+            Determines whether [is same Column] [the specified <see cref="T:SudokuSharp.Location"/> CompareTo].
+            </summary>
+            <param name="CompareTo">The <see cref="T:SudokuSharp.Location"/> to be compared.</param>
+            <returns>True or False</returns>
+        </member>
+        <member name="M:SudokuSharp.Location.IsSameZone(SudokuSharp.Location)">
+            <summary>
+            Determines whether [is same Zone] [the specified <see cref="T:SudokuSharp.Location"/> CompareTo].
+            </summary>
+            <param name="CompareTo">The <see cref="T:SudokuSharp.Location"/> to be compared.</param>
+            <returns>True or False</returns>
+        </member>
+        <member name="M:SudokuSharp.Location.IsBlockedBy(SudokuSharp.Location)">
+            <summary>
+            Determines whether [the specified <see cref="T:SudokuSharp.Location"/> CompareTo] is either of the same row, column or zone as the calling instance.
+            </summary>
+            <param name="CompareTo">The <see cref="T:SudokuSharp.Location"/> to be compared.</param>
+            <returns>True or False</returns>
+        </member>
+    </members>
+</doc>
