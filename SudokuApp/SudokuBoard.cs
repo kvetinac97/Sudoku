@@ -10,12 +10,48 @@ namespace Sudoku
     public class SudokuBoard
     {
 
-        private Board board;
+        private Board board { get; }
+        private int seed = -1;
+
+        public SudokuBoard (Board board, int seed = -1)
+        {
+            this.board = board;
+            this.seed = -1;
+        }
 
         public static SudokuBoard empty()
         {
-            Board board = new Board();
-            return new SudokuBoard();
+            return new SudokuBoard(new Board());
+        }
+
+        public static SudokuBoard create(int difficulty)
+        {
+            int seed = new Random((int)Math.Round((DateTime.Now - new DateTime(1970, 1, 1)).TotalSeconds)).Next(int.MaxValue);
+            return new SudokuBoard(Factory.Puzzle(seed, 0, difficulty * 3, difficulty * 5), seed);
+        }
+
+        public SudokuBoard getSolution()
+        {
+            if (board.IsSolved)
+                return this;
+
+            if (!board.IsValid)
+                return null;
+
+            switch (board.CountSolutions())
+            {
+                case 0:
+                    return null;
+                case 1:
+                    if (seed != -1)
+                    {
+                        return new SudokuBoard(Factory.Solution(seed), seed);
+                    }
+                        return Factory.Solution(seed);
+                    goto default;
+                default:
+                    return Factory.Puzzle(board, new Random(), 0, 0, 0);
+            }
         }
 
         public static void LoadIntoGameForm(GameForm gameForm, string fileName)

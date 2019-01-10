@@ -75,7 +75,8 @@ namespace Sudoku
                 switch (difficulty.SelectedItem)
                 {
                     case "Prázdné Sudoku":
-                        
+                        gameForm.board = SudokuBoard.empty();
+                        gameForm.solution = gameForm.board.getSolution();
                         break;
 
                 }
