@@ -3,13 +3,13 @@ C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\bi
 C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\bin\Debug\Sudoku.pdb
 C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\bin\Debug\SudokuSharp.dll
 C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\bin\Debug\SudokuSharp.xml
+C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\obj\Debug\Sudoku.csprojAssemblyReference.cache
+C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\obj\Debug\Sudoku.GameForm.resources
+C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\obj\Debug\Sudoku.IntroductionForm.resources
 C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\obj\Debug\Sudoku.Properties.Resources.resources
+C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\obj\Debug\Sudoku.StartGameForm.resources
 C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\obj\Debug\Sudoku.csproj.GenerateResource.cache
 C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\obj\Debug\Sudoku.csproj.CoreCompileInputs.cache
 C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\obj\Debug\Sudoku.csproj.CopyComplete
 C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\obj\Debug\Sudoku.exe
 C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\obj\Debug\Sudoku.pdb
-C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\obj\Debug\Sudoku.csprojAssemblyReference.cache
-C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\obj\Debug\Sudoku.GameForm.resources
-C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\obj\Debug\Sudoku.IntroductionForm.resources
-C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\obj\Debug\Sudoku.StartGameForm.resources

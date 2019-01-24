@@ -38,7 +38,7 @@ namespace Sudoku
 
                         if (result == DialogResult.Yes)
                         {
-                            Application.Run(new GameForm(data));
+                            Application.Run(new GameForm(data, true));
                             return;
                         }
                         else
@@ -50,7 +50,7 @@ namespace Sudoku
                 }
             }
 
-            Application.Run(new IntroductionForm());
+            Application.Run(new IntroductionForm(true));
         }
     }
 }

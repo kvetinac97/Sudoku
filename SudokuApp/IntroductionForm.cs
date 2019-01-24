@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Sudoku
@@ -14,8 +6,14 @@ namespace Sudoku
     public partial class IntroductionForm : Form
     {
 
-        public IntroductionForm()
+        private bool onMainThread;
+        private bool shouldCloseApplication = false;
+
+        public IntroductionForm(bool onMainThread = false)
         {
+            this.onMainThread = onMainThread;
+            this.shouldCloseApplication = !onMainThread;
+
             InitializeComponent();
         }
 
@@ -28,14 +26,18 @@ namespace Sudoku
                              "v každém řádku, v každém sloupci a v každém z devíti čtverců jsou použita vždy\n" +
                              "všechna čísla jedna až devět, ovšem každé číslo jen jednou. Pořadí čísel není\n" +
                              "důležité. Čísla se nesmějí opakovat v žádném sloupci, řadě ani malém čtverci.";
-
         }
 
         private void openStartDialog(object sender, EventArgs e)
         {
             StartGameForm startGame = new StartGameForm();
             startGame.Show();
-            Hide();
+            shouldCloseApplication = false;
+
+            if (onMainThread)
+                Hide();
+            else
+                Close();
         }
 
         // === HOW TO PLAY ===
@@ -72,5 +74,10 @@ namespace Sudoku
             Application.Exit();
         }
 
+        private void OnFormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (shouldCloseApplication)
+                closeGame(sender, e);
+        }
     }
 }

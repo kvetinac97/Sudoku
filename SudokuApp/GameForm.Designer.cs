@@ -52,7 +52,7 @@
             this.sudokuBoard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.sudokuBoard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.sudokuBoard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.sudokuBoard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.sudokuBoard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 56F));
             this.sudokuBoard.Location = new System.Drawing.Point(17, 12);
             this.sudokuBoard.Name = "sudokuBoard";
             this.sudokuBoard.RowCount = 9;
@@ -139,6 +139,7 @@
             this.endGameButton.TabIndex = 7;
             this.endGameButton.Text = "ZAVŘÍT HRU";
             this.endGameButton.UseVisualStyleBackColor = true;
+            this.endGameButton.Click += new System.EventHandler(this.CloseGameForm);
             // 
             // label1
             // 
@@ -169,6 +170,7 @@
             this.MaximizeBox = false;
             this.Name = "GameForm";
             this.Text = "Hra - ";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CloseGameForm);
             this.Load += new System.EventHandler(this.SudokuApp_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

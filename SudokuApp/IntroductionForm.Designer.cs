@@ -132,6 +132,7 @@
             this.MaximizeBox = false;
             this.Name = "IntroductionForm";
             this.Text = "Sudoku";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);
             this.PerformLayout();

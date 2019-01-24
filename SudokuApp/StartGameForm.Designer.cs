@@ -51,6 +51,7 @@
             // 
             // difficulty
             // 
+            this.difficulty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.difficulty.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.difficulty.FormattingEnabled = true;
             this.difficulty.Items.AddRange(new object[] {
@@ -63,7 +64,6 @@
             this.difficulty.Name = "difficulty";
             this.difficulty.Size = new System.Drawing.Size(310, 33);
             this.difficulty.TabIndex = 2;
-            this.difficulty.Text = "Obtížnost...";
             // 
             // savedGamesTitle
             // 
@@ -96,6 +96,7 @@
             this.savedGames.Size = new System.Drawing.Size(619, 229);
             this.savedGames.TabIndex = 5;
             this.savedGames.SelectedIndexChanged += new System.EventHandler(this.SavedGameSelected);
+            this.savedGames.Leave += new System.EventHandler(this.SavedGamesOutclicked);
             // 
             // deleteSave
             // 
@@ -125,7 +126,6 @@
             this.MaximizeBox = false;
             this.Name = "StartGameForm";
             this.Text = "Sudoku - nová hra";
-            this.Load += new System.EventHandler(this.LoadSavedGames);
             ((System.ComponentModel.ISupportInitialize)(this.savedGamesFolder)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

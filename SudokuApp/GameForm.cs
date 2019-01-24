@@ -15,19 +15,21 @@ namespace Sudoku
     {
 
         public string name;
+        private bool onMainThread;
+
         public int timeStarted = (int) (DateTime.Now - new DateTime(1970, 1, 1)).TotalSeconds;
         public int timePlaying = 0;
 
         public SudokuBoard board;
         public SudokuBoard solution;
-        public int solutionCount = 1;
 
         public Stack<SudokuBoard> previous = new Stack<SudokuBoard>();
         public Stack<SudokuBoard> next = new Stack<SudokuBoard>();
 
-        public GameForm(string fileName)
+        public GameForm(string fileName, bool onMainThread = false)
         {
             InitializeComponent();
+            this.onMainThread = onMainThread;
             SudokuBoard.LoadIntoGameForm(this, fileName);
         }
 
@@ -70,6 +72,19 @@ namespace Sudoku
                 return;
 
             //e.Graphics.FillRectangle(new SolidBrush(Color.Yellow), e.CellBounds);
+        }
+
+        private void CloseGameForm(object sender, EventArgs e)
+        {
+            if (!onMainThread && sender is Button)
+            {
+                Close();
+                return;
+            }
+            else if (sender is Button)
+                Hide();
+
+            new StartGameForm().Show();
         }
     }
 }

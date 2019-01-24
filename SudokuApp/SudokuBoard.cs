@@ -1,6 +1,7 @@
 ﻿using SudokuSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace Sudoku
     public class SudokuBoard
     {
 
-        private Board board { get; }
+        private Board board;
         private int seed = -1;
 
         public SudokuBoard (Board board, int seed = -1)
@@ -19,74 +20,61 @@ namespace Sudoku
             this.seed = -1;
         }
 
-        public static SudokuBoard empty()
+        public Board GetBoard()
         {
-            return new SudokuBoard(new Board());
+            return board;
         }
 
-        public static SudokuBoard create(int difficulty)
+        public static SudokuBoard Empty()
+        {
+            Board board = new Board();
+            return new SudokuBoard(board);
+        }
+
+        public static SudokuBoard Create(int difficulty)
         {
             int seed = new Random((int)Math.Round((DateTime.Now - new DateTime(1970, 1, 1)).TotalSeconds)).Next(int.MaxValue);
             return new SudokuBoard(Factory.Puzzle(seed, 0, difficulty * 3, difficulty * 5), seed);
         }
 
-        public SudokuBoard getSolution()
+        public SudokuBoard GetSolution()
         {
             if (board.IsSolved)
                 return this;
 
-            if (!board.IsValid)
-                return null;
-
-            switch (board.CountSolutions())
+            if (seed != -1)
             {
-                case 0:
-                    return null;
-                case 1:
-                    if (seed != -1)
-                    {
-                        return new SudokuBoard(Factory.Solution(seed), seed);
-                    }
-                        return Factory.Solution(seed);
-                    goto default;
-                default:
-                    return Factory.Puzzle(board, new Random(), 0, 0, 0);
+                return new SudokuBoard(Factory.Solution(seed), seed);
             }
+
+            return new SudokuBoard(board.Fill.Sequential());
         }
 
+        //TODO zkontrolovat jestli funguje
         public static void LoadIntoGameForm(GameForm gameForm, string fileName)
         {
-            //TODO 
-            /*using (XmlReader xr = XmlReader.Create(fileInfo.FullName))
+            using (StreamReader reader = new StreamReader(new FileStream(Path.Combine(Program.SAVE_PATH,
+                fileName + ".sudoku"), FileMode.Open)))
             {
-                GameForm gameForm = new GameForm("");
-                string actualElement = null;
+                gameForm.name = reader.ReadLine().Trim();
+                gameForm.timeStarted = int.Parse(reader.ReadLine().Trim());
 
-                while (xr.Read())
+                int seed = int.Parse(reader.ReadLine().Trim());
+                string sudokuText = reader.ReadLine().Trim();
+
+                Board board = new Board();
+                for (int i = 0; i < 81; i++)
                 {
-                    if (xr.NodeType == XmlNodeType.Element)
-                    {
-                        actualElement = xr.Name;
-                        if (actualElement == "field")
-                        {
+                    if (sudokuText[i] == '-')
+                        continue;
 
-                        }
-                        //if (xr.Name == "xxx") yy = xr.GetAttribute("zzz");
-                    }
-                    else if (xr.NodeType == XmlNodeType.Text)
-                    {
-                        if (actualElement == "name")
-                        {
-                            gameForm.name = xr.Value;
-                        }
-                        //if (actualElement == "xxx") yy = xr.Value;
-                    }
-                    else if (xr.NodeType == XmlNodeType.EndElement)
-                    {
-                        actualElement = null;
-                    }
+                    board.PutCell(i, int.Parse(sudokuText[i].ToString()));
+                    i++;
                 }
-            }*/
+            
+                gameForm.board = new SudokuBoard(board, seed);
+                gameForm.solution = gameForm.board.GetSolution();
+            }
         }
 
     }
