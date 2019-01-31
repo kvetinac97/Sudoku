@@ -6,6 +6,7 @@ namespace Sudoku
 {
     public partial class StartGameForm : Form
     {
+        //Proměnné
         private string selectedSave = null;
         bool shouldOpenIntroduction = true;
 
@@ -20,14 +21,14 @@ namespace Sudoku
         {
             savedGames.Items.Clear();
 
-            foreach (FileInfo fileInfo in new DirectoryInfo(Program.SAVE_PATH).GetFiles("*.sudoku"))
+            foreach (FileInfo fileInfo in new DirectoryInfo(Path.Combine(Program.SAVE_PATH, "games")).GetFiles("*.sudoku"))
                 savedGames.Items.Add(Path.GetFileNameWithoutExtension(fileInfo.Name));
         }
 
         //Otevře složku s uloženými hrami
         private void openSavedFolder(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("explorer.exe", Program.SAVE_PATH);
+            System.Diagnostics.Process.Start("explorer.exe", Path.Combine(Program.SAVE_PATH, "games"));
         }
 
         //Změna tlačítek po kliknutí na uloženou hru
@@ -42,12 +43,16 @@ namespace Sudoku
         }
 
         //Změna tlačítek po vykliknutí z uložené hry
-
-        //TODO NEFUNGUJE OPRAVIT !!!
         private void SavedGamesOutclicked(object sender, EventArgs e)
         {
-            difficulty.Show();
+            if (sender is ListBox && !difficulty.Visible)
+                return;
+
+            savedGames.SelectedIndex = -1;
+            selectedSave = null;
+
             deleteSave.Hide();
+            difficulty.Show();
             newPlayGame.Text = "NOVÁ HRA";
         }
 
@@ -69,15 +74,23 @@ namespace Sudoku
         {
             if (selectedSave != null)
             {
-                GameForm gameForm = new GameForm(selectedSave);
+                GameForm gameForm = new GameForm();
                 SudokuBoard.LoadIntoGameForm(gameForm, selectedSave);
-
                 gameForm.Show();
+
+                shouldOpenIntroduction = false;
                 Close();
             }
             else
             {
-                GameForm gameForm = new GameForm("");
+                GameForm gameForm = new GameForm();
+                if (difficulty.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Vyberte prosím platnou obtížnost!", "Neexistující obtížnost",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 gameForm.name = Prompt.ShowDialog("Jméno hry:", "Sudoku");
 
                 int gameDifficulty = 1;
@@ -102,8 +115,23 @@ namespace Sudoku
 
                 gameForm.solution = gameForm.board.GetSolution();
                 gameForm.Show();
+
+                shouldOpenIntroduction = false;
                 Close();
             }
+        }
+
+        //Zavření okna
+        private void closeWindowHandle(object sender, EventArgs e)
+        {
+            if (!(e is FormClosingEventArgs))
+            {
+                Close();
+                return;
+            }
+
+            if (shouldOpenIntroduction)
+                new IntroductionForm().Show();
         }
     }
 }

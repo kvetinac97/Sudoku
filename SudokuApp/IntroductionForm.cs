@@ -71,7 +71,7 @@ namespace Sudoku
         //Zavření hry
         private void closeGame(object sender, EventArgs e)
         {
-            Application.Exit();
+            Application.ExitThread();
         }
 
         private void OnFormClosing(object sender, FormClosingEventArgs e)

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Sudoku
@@ -38,7 +35,10 @@ namespace Sudoku
 
                         if (result == DialogResult.Yes)
                         {
-                            Application.Run(new GameForm(data, true));
+                            GameForm gameForm = new GameForm(true);
+                            SudokuBoard.LoadIntoGameForm(gameForm, data);
+                            reader.Close();
+                            Application.Run(gameForm);
                             return;
                         }
                         else
