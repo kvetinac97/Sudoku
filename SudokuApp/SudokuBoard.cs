@@ -100,9 +100,20 @@ namespace Sudoku
                     board.PutCell(i, int.Parse(sudokuText[i].ToString()));
                     i++;
                 }
-            
+
+                gameForm.originalBoard = new SudokuBoard(board, seed);
                 gameForm.board = new SudokuBoard(board, seed);
                 gameForm.solution = gameForm.board.GetSolution();
+
+                //Načtení uložených tahů
+                string[] previousTahy = reader.ReadLine().Trim().Split(':');
+
+                foreach (string previousTah in previousTahy)
+                {
+                    SudokuTah tah = SudokuTah.FromString(previousTah.Split('-'));
+                    gameForm.previous.Push(tah);
+                    gameForm.board.board.PutCell(tah.GetIndex(), tah.GetNext());
+                }
 
                 reader.Close();
             }

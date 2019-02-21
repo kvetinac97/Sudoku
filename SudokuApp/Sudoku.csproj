@@ -74,6 +74,7 @@
       <DependentUpon>StartGameForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SudokuBoard.cs" />
+    <Compile Include="SudokuTah.cs" />
     <EmbeddedResource Include="GameForm.resx">
       <DependentUpon>GameForm.cs</DependentUpon>
     </EmbeddedResource>

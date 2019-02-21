@@ -20,11 +20,11 @@ namespace Sudoku
 
         public int timePlaying = 0;
 
-        public SudokuBoard board;
-        public SudokuBoard solution;
+        public SudokuBoard originalBoard, board, solution;
+        int selectedRow = -1, selectedCol = -1;
 
-        public Stack<SudokuBoard> previous = new Stack<SudokuBoard>();
-        public Stack<SudokuBoard> next = new Stack<SudokuBoard>();
+        public Stack<SudokuTah> previous = new Stack<SudokuTah>();
+        public Stack<SudokuTah> next = new Stack<SudokuTah>();
 
         public GameForm(bool onMainThread = false)
         {
@@ -34,43 +34,74 @@ namespace Sudoku
 
         private void SudokuApp_Load(object sender, EventArgs e)
         {
-            Board board2 = Factory.Solution(new Random((int) 
-                (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)))
-                .TotalSeconds).Next(int.MaxValue));
+            //Vyhledání prvního volného pole
+            for (int i = 0; i < 81; i++)
+                if (board.GetBoard().GetCell(new Location(i)) == 0)
+                {
+                    selectedCol = i % 9;
+                    selectedRow = i / 9;
+                    break;
+                }
 
+            //Načtení pole z dat
             for (int col = 0; col < 9; col++)
             {
                 for (int row = 0; row < 9; row++)
                 {
                     Label label = new Label();
-                    int val = board2.GetCell(new Location(col, row));
+                    label.Name = col + "_" + row;
 
+                    Location loc = new Location(col, row);
+                    int val = board.GetBoard().GetCell(loc);
+
+                    label.ForeColor = (val != 0 && originalBoard.GetBoard().GetCell(loc) == 0) ? Color.Blue : Color.Black;
                     label.Text = val == 0 ? "" : ""+val;
                     label.TextAlign = ContentAlignment.MiddleCenter;
+
                     label.Font = new Font(label.Font.FontFamily, 20);
                     label.Size = new Size(40, 40);
                     label.Click += Label_Click;
 
-                    //if (col == 0 && row == 0)
-                    //    label.BackColor = Color.Yellow;
+                    if (col == selectedCol && row == selectedRow)
+                        label.BackColor = Color.Yellow;
 
                     sudokuBoard.Controls.Add(label, col, row);
                 }
             }
             
         }
-
-        private void Label_Click(object sender, EventArgs e)
-        {
-            sudokuBoard.Invalidate();
-        }
-
+        //Vykreslení ohraničení pole
         private void sudokuBoard_CellPaint(object sender, TableLayoutCellPaintEventArgs e)
         {
-            if (e.Column != 0 || e.Row != 0)
+            if (e.Column != selectedCol || e.Row != selectedRow)
                 return;
 
-            //e.Graphics.FillRectangle(new SolidBrush(Color.Yellow), e.CellBounds);
+            e.Graphics.FillRectangle(new SolidBrush(Color.Yellow), e.CellBounds);
+        }
+
+        //Překliknutí vybraného pole
+        private void Label_Click(object sender, EventArgs e)
+        {
+            //Najde označené místo a zruší na něm označení
+            Control previous = sudokuBoard.Controls[selectedCol + "_" + selectedRow];
+            previous.BackColor = Color.FromKnownColor(KnownColor.Control);
+
+            Rectangle rect = previous.Bounds;
+            rect.Inflate(3, 0);
+            sudokuBoard.Invalidate(rect);
+
+            //Zjistí z parametrů události řádek a sloupec
+            string[] colRow = ((Label)sender).Name.Split('_');
+            selectedCol = int.Parse(colRow[0]);
+            selectedRow = int.Parse(colRow[1]);
+
+            //Označí nové místo
+            Control next = sudokuBoard.Controls[selectedCol + "_" + selectedRow];
+            next.BackColor = Color.Yellow;
+
+            Rectangle rect2 = next.Bounds;
+            rect2.Inflate(3, 0);
+            sudokuBoard.Invalidate(rect2);
         }
 
         //Zavření formuláře - uložení hry
@@ -104,7 +135,15 @@ namespace Sudoku
                 writer.WriteLine(name);
                 writer.WriteLine("" + timePlaying);
                 writer.WriteLine("" + board.GetSeed());
-                writer.WriteLine(board.ToString());
+                writer.WriteLine(originalBoard.ToString());
+                
+                //Uložení tahů
+                string previousTahy = "";
+                foreach (SudokuTah tah in previous)
+                {
+                    previousTahy = tah.ToString() + ":";
+                }
+                writer.WriteLine(previousTahy.Substring(0, previousTahy.Length - 1));
 
                 writer.Flush();
                 writer.Close();
