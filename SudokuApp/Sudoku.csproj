@@ -36,9 +36,6 @@
     <ApplicationIcon>Resources\sudoku.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SudokuSharp, Version=2.0.5850.28298, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SudokuSharp.2.0.5850.28298\lib\portable-net40+sl50+win+WindowsPhoneApp81+wp80\SudokuSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -94,7 +91,6 @@
     <EmbeddedResource Include="StartGameForm.resx">
       <DependentUpon>StartGameForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

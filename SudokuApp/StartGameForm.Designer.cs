@@ -49,7 +49,7 @@
             this.newPlayGame.TabIndex = 1;
             this.newPlayGame.Text = "NOVÁ HRA";
             this.newPlayGame.UseVisualStyleBackColor = true;
-            this.newPlayGame.Click += new System.EventHandler(this.startGame);
+            this.newPlayGame.Click += new System.EventHandler(this.StartGame);
             // 
             // difficulty
             // 
@@ -87,7 +87,7 @@
             this.closeSelection.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.closeSelection.TabIndex = 4;
             this.closeSelection.TabStop = false;
-            this.closeSelection.Click += new System.EventHandler(this.closeWindowHandle);
+            this.closeSelection.Click += new System.EventHandler(this.HandleCloseWindow);
             // 
             // savedGames
             // 
@@ -110,7 +110,7 @@
             this.deleteSave.Text = "SMAZAT HRU";
             this.deleteSave.UseVisualStyleBackColor = true;
             this.deleteSave.Visible = false;
-            this.deleteSave.Click += new System.EventHandler(this.deleteSavedGame);
+            this.deleteSave.Click += new System.EventHandler(this.DeleteSavedGame);
             // 
             // savesFolder
             // 
@@ -121,7 +121,7 @@
             this.savesFolder.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.savesFolder.TabIndex = 7;
             this.savesFolder.TabStop = false;
-            this.savesFolder.Click += new System.EventHandler(this.openSavedFolder);
+            this.savesFolder.Click += new System.EventHandler(this.OpenSavedFolder);
             // 
             // StartGameForm
             // 
@@ -140,7 +140,7 @@
             this.MaximizeBox = false;
             this.Name = "StartGameForm";
             this.Text = "Sudoku - nová hra";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.closeWindowHandle);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.HandleCloseWindow);
             this.Click += new System.EventHandler(this.SavedGamesOutclicked);
             ((System.ComponentModel.ISupportInitialize)(this.closeSelection)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.savesFolder)).EndInit();

@@ -26,7 +26,7 @@ namespace Sudoku
         }
 
         //Otevře složku s uloženými hrami
-        private void openSavedFolder(object sender, EventArgs e)
+        private void OpenSavedFolder(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("explorer.exe", Path.Combine(Program.SAVE_PATH, "games"));
         }
@@ -57,7 +57,7 @@ namespace Sudoku
         }
 
         //Smazání uložené hry
-        private void deleteSavedGame(object sender, EventArgs e)
+        private void DeleteSavedGame(object sender, EventArgs e)
         {
             File.Delete(Path.Combine(Program.SAVE_PATH, selectedSave + ".txt"));
             selectedSave = null;
@@ -70,7 +70,7 @@ namespace Sudoku
         }
 
         //Spuštění hry
-        private void startGame(object sender, EventArgs e)
+        private void StartGame(object sender, EventArgs e)
         {
             if (selectedSave != null)
             {
@@ -97,7 +97,7 @@ namespace Sudoku
                 switch (difficulty.SelectedItem)
                 {
                     case "Prázdné Sudoku":
-                        gameForm.board = SudokuBoard.Empty();
+                        gameForm.board = new SudokuBoard();
                         break;
                     case "Ultrahardcore":
                         gameDifficulty = 4;
@@ -122,7 +122,7 @@ namespace Sudoku
         }
 
         //Zavření okna
-        private void closeWindowHandle(object sender, EventArgs e)
+        private void HandleCloseWindow(object sender, EventArgs e)
         {
             if (!(e is FormClosingEventArgs))
             {

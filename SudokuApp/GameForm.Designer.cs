@@ -52,7 +52,7 @@
             this.sudokuBoard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.sudokuBoard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.sudokuBoard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.sudokuBoard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 57F));
+            this.sudokuBoard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 61F));
             this.sudokuBoard.Location = new System.Drawing.Point(17, 12);
             this.sudokuBoard.Name = "sudokuBoard";
             this.sudokuBoard.RowCount = 9;
@@ -67,7 +67,7 @@
             this.sudokuBoard.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.sudokuBoard.Size = new System.Drawing.Size(374, 372);
             this.sudokuBoard.TabIndex = 0;
-            this.sudokuBoard.CellPaint += new System.Windows.Forms.TableLayoutCellPaintEventHandler(this.sudokuBoard_CellPaint);
+            this.sudokuBoard.CellPaint += new System.Windows.Forms.TableLayoutCellPaintEventHandler(this.SudokuBoard_CellPaint);
             // 
             // timeLabel
             // 
@@ -99,6 +99,7 @@
             this.stepBack.TabIndex = 3;
             this.stepBack.Text = "ZPĚT";
             this.stepBack.UseVisualStyleBackColor = true;
+            this.stepBack.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KlavesaStisknuta);
             // 
             // stepForward
             // 
@@ -109,6 +110,7 @@
             this.stepForward.TabIndex = 4;
             this.stepForward.Text = "DALŠÍ";
             this.stepForward.UseVisualStyleBackColor = true;
+            this.stepForward.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KlavesaStisknuta);
             // 
             // hintButton
             // 
@@ -119,6 +121,8 @@
             this.hintButton.TabIndex = 5;
             this.hintButton.Text = "NÁPOVĚDA";
             this.hintButton.UseVisualStyleBackColor = true;
+            this.hintButton.Click += new System.EventHandler(this.Napoveda);
+            this.hintButton.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KlavesaStisknuta);
             // 
             // autoSolveButton
             // 
@@ -127,8 +131,9 @@
             this.autoSolveButton.Name = "autoSolveButton";
             this.autoSolveButton.Size = new System.Drawing.Size(264, 38);
             this.autoSolveButton.TabIndex = 6;
-            this.autoSolveButton.Text = "UKÁZAT ŘEŠENÍ";
+            this.autoSolveButton.Text = "VYŘEŠIT";
             this.autoSolveButton.UseVisualStyleBackColor = true;
+            this.autoSolveButton.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KlavesaStisknuta);
             // 
             // endGameButton
             // 
@@ -140,6 +145,7 @@
             this.endGameButton.Text = "ZAVŘÍT HRU";
             this.endGameButton.UseVisualStyleBackColor = true;
             this.endGameButton.Click += new System.EventHandler(this.CloseGameForm);
+            this.endGameButton.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KlavesaStisknuta);
             // 
             // label1
             // 
@@ -172,6 +178,7 @@
             this.Text = "Hra - ";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CloseGameForm);
             this.Load += new System.EventHandler(this.SudokuApp_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KlavesaStisknuta);
             this.ResumeLayout(false);
             this.PerformLayout();
 
