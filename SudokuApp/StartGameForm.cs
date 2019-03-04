@@ -8,7 +8,8 @@ namespace Sudoku
     {
         //Proměnné
         private string selectedSave = null;
-        bool shouldOpenIntroduction = true;
+        bool shouldOpenIntroduction = false;
+        bool shouldShutdown = true;
 
         public StartGameForm()
         {
@@ -59,7 +60,7 @@ namespace Sudoku
         //Smazání uložené hry
         private void DeleteSavedGame(object sender, EventArgs e)
         {
-            File.Delete(Path.Combine(Program.SAVE_PATH, selectedSave + ".txt"));
+            File.Delete(Path.Combine(Path.Combine(Program.SAVE_PATH, "games/"), selectedSave + ".sudoku"));
             selectedSave = null;
 
             difficulty.Show();
@@ -78,7 +79,7 @@ namespace Sudoku
                 SudokuBoard.LoadIntoGameForm(gameForm, selectedSave);
                 gameForm.Show();
 
-                shouldOpenIntroduction = false;
+                shouldShutdown = false;
                 Close();
             }
             else
@@ -110,28 +111,31 @@ namespace Sudoku
                         goto default;
                     default:
                         gameForm.board = SudokuBoard.Create(gameDifficulty);
+                        MessageBox.Show(gameForm.board.ToString());
                         break;
                 }
 
-                gameForm.solution = gameForm.board.GetSolution();
+                gameForm.originalBoard = gameForm.board.Clone();
                 gameForm.Show();
 
-                shouldOpenIntroduction = false;
+                shouldShutdown = false;
                 Close();
             }
         }
 
         //Zavření okna
+        private void HandleCloseButton(object sender, EventArgs e)
+        {
+            shouldOpenIntroduction = true;
+            shouldShutdown = false;
+            Close();
+        }
         private void HandleCloseWindow(object sender, EventArgs e)
         {
-            if (!(e is FormClosingEventArgs))
-            {
-                Close();
-                return;
-            }
-
             if (shouldOpenIntroduction)
                 new IntroductionForm().Show();
+            else if (shouldShutdown)
+                Application.Exit();
         }
     }
 }

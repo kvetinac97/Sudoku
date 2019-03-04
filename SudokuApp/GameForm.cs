@@ -14,7 +14,7 @@ namespace Sudoku
         private bool onMainThread;
         public int timePlaying = 0;
 
-        public SudokuBoard originalBoard, board, solution;
+        public SudokuBoard originalBoard, board;
         public Point selectedField;
 
         public Stack<SudokuTah> previous = new Stack<SudokuTah>();
@@ -29,6 +29,8 @@ namespace Sudoku
         }
         private void SudokuApp_Load(object sender, EventArgs e)
         {
+            //Název formuláře
+            Text = "Hra - " + name;
             //Nastavení vybraného pole
             if (selectedField.X == -1 && selectedField.Y == -1)
                 selectedField = board.FirstEmpty();
@@ -59,7 +61,9 @@ namespace Sudoku
                     sudokuBoard.Controls.Add(label, col, row);
                 }
             }
-            
+
+            //Překreslení špatně zadaných polí
+            RedrawFields(true);
         }
         private void SudokuBoard_CellPaint(object sender, TableLayoutCellPaintEventArgs e)
         {
@@ -76,9 +80,9 @@ namespace Sudoku
             //Zjistí staré pole
             string[] colRow = ((Label)sender).Name.Split('_');
             int col = int.Parse(colRow[0]), row = int.Parse(colRow[1]);
-
-            //Nemůžeme upravovat stálé hodnoty
-            if (originalBoard.GetValue(col, row) != 0)
+            
+            //Nemůžeme upravovat stálé hodnoty ani překlikávat vyřešené Sudoku
+            if (originalBoard.GetValue(col, row) != 0 || board.IsSolved())
                 return;
 
             //Najde označené místo a zruší na něm označení
@@ -111,24 +115,55 @@ namespace Sudoku
                 return;
             }
 
+            SudokuBoard solution = board.GetSolution();
+            if (solution == null)
+            {
+                MessageBox.Show("Toto Sudoku je neplatné nebo nemá řešení.");
+                return;
+            }
+
             PrekliknutiPole(sudokuBoard.Controls[volny.X + "_" + volny.Y], null);
             VykonejTah(volny.X, volny.Y, solution.GetValue(volny.X, volny.Y));
             MessageBox.Show("Nápověda byla využita.");
         }
 
+        //Zobrazení řešení Sudoku
+        private void VyresitSudoku(object sender, EventArgs e)
+        {
+            SudokuBoard solution = board.GetSolution();
+            if (solution == null)
+            {
+                MessageBox.Show("Toto Sudoku je neplatné nebo nemá řešení.");
+                return;
+            }
+
+            for (int col = 0; col < 9; col++)
+            {
+                for (int row = 0; row < 9; row++)
+                {
+                    if (originalBoard.GetValue(col, row) == 0)
+                        VykonejTah(col, row, solution.GetValue(col, row), false);
+                }
+            }
+
+            RedrawFields();
+        }
+
         // INTERNAL | Vykonání tahu
-        private void VykonejTah(int col, int row, int value)
+        private void VykonejTah(int col, int row, int value, bool redraw = true)
         {
             SudokuTah tah = new SudokuTah(row * 9 + col, board.GetValue(col, row), value);
             previous.Push(tah);
 
             sudokuBoard.Controls[col + "_" + row].Text = ("" + value).Replace("0", "");
             board.SetValue(col, row, value);
-            RedrawFields();
+
+            if (redraw)
+                RedrawFields();
         }
 
-        //Překreslení pole v případě chybného zadání
-        private void RedrawFields()
+        //Překreslení pole
+        private void RedrawFields(bool firstStart = false)
         {
             Dictionary<int, Point> used = new Dictionary<int, Point>();
             List<string> wrong = new List<string>();
@@ -228,6 +263,28 @@ namespace Sudoku
                     }
                 }
             }
+
+            if (board.IsSolved())
+            {
+                if (selectedField.X != -1 && selectedField.Y != 1)
+                    sudokuBoard.Controls[selectedField.X + "_" + selectedField.Y].BackColor
+                        = Color.FromKnownColor(KnownColor.Control);
+
+                selectedField = new Point(-1, -1);
+
+                stepBack.Enabled = false;
+                stepForward.Enabled = false;
+                autoSolveButton.Enabled = false;
+                hintButton.Enabled = false;
+
+                if (!firstStart)
+                    MessageBox.Show("Gratulujeme! Sudoku bylo vyřešeno.");
+
+                return;
+            }
+
+            stepBack.Enabled = previous.Count != 0;
+            stepForward.Enabled = next.Count != 0;
         }
 
         //Vyplňování číslic do hry
@@ -242,30 +299,39 @@ namespace Sudoku
             switch (e.KeyCode)
             {
                 case Keys.NumPad1:
+                case Keys.D1:
                     num = 1;
                     break;
                 case Keys.NumPad2:
+                case Keys.D2:
                     num = 2;
                     break;
                 case Keys.NumPad3:
+                case Keys.D3:
                     num = 3;
                     break;
                 case Keys.NumPad4:
+                case Keys.D4:
                     num = 4;
                     break;
                 case Keys.NumPad5:
+                case Keys.D5:
                     num = 5;
                     break;
                 case Keys.NumPad6:
+                case Keys.D6:
                     num = 6;
                     break;
                 case Keys.NumPad7:
+                case Keys.D7:
                     num = 7;
                     break;
                 case Keys.NumPad8:
+                case Keys.D8:
                     num = 8;
                     break;
                 case Keys.NumPad9:
+                case Keys.D9:
                     num = 9;
                     break;
                 case Keys.Back:
@@ -278,29 +344,63 @@ namespace Sudoku
                 VykonejTah(selectedField.X, selectedField.Y, num);
         }
 
-        //Zavření formuláře - uložení hry
+        //Vrátit tah
+        private void StepBack(object sender, EventArgs e)
+        {
+            SudokuTah tah = previous.Pop();
+            VykonejTah(tah.GetIndex() % 9, tah.GetIndex() / 9, tah.GetOriginal(), false);
+            next.Push(previous.Pop());
+
+            PrekliknutiPole(new Label() { Name = (tah.GetIndex() % 9) + "_" + (tah.GetIndex() / 9) }, null);
+            RedrawFields();
+        }
+
+        //Vrácení vráceného tahu
+        private void StepForward(object sender, EventArgs e)
+        {
+            SudokuTah tah = next.Pop();
+            VykonejTah(tah.GetIndex() % 9, tah.GetIndex() / 9, tah.GetOriginal(), false);
+
+            PrekliknutiPole(new Label() { Name = (tah.GetIndex() % 9) + "_" + (tah.GetIndex() / 9) }, null);
+            RedrawFields();
+        }
+
+        bool clickedClose = false;
+
+        //Slušné zavření tlačítkem
+        private void ClickCloseGameForm(object sender, EventArgs e)
+        {
+            clickedClose = true;
+
+            if (onMainThread)
+                Hide();
+            else
+                Close();
+
+            new StartGameForm().Show();
+        }
+
+        //Zvířecí zavření křížkem
         private void CloseGameForm(object sender, EventArgs e)
         {
+            if (sender is Button)
+                clickedClose = false;
+
+            //Uložíme jako poslední hru
             string saveFile = Path.Combine(Program.SAVE_PATH, "lastGame.txt");
             using (StreamWriter writer = new StreamWriter(new FileStream(saveFile, FileMode.Create)))
             {
-                writer.Write(name);
+                writer.Write(clickedClose ? "" : name);
                 writer.Flush();
                 writer.Close();
             }
 
             SaveGameFile();
 
-            if (!onMainThread && sender is Button)
-            {
-                Close();
-                return;
-            }
-            else if (sender is Button)
-                Hide();
-
-            new StartGameForm().Show();
+            if (!clickedClose)
+                Application.Exit();
         }
+
         private void SaveGameFile()
         {
             string saveFile = Path.Combine(Path.Combine(Program.SAVE_PATH, "games"), name + ".sudoku");

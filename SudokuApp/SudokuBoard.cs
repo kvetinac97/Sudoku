@@ -33,14 +33,18 @@ namespace Sudoku
                     number = 28;
                     break;
                 case 2:
-                    number = 40;
+                    number = 32;
                     break;
                 case 3:
-                    number = 48;
+                    number = 38;
+                    break;
+                case 4:
+                    number = 42;
                     break;
             }
 
-            board.SolveBoard(board);
+            board = board.GetSolution().Clone();
+
             board.CutCells(number);
             return board;
         }
@@ -51,11 +55,13 @@ namespace Sudoku
             int cut = 0;
             int recursionTimes = 0;
 
-            while (cut != number && recursionTimes < 100)
+            while (cut < number && recursionTimes < 1000)
             {
                 recursionTimes++;
-                int col = new Random((int)(DateTime.Now - new DateTime(2018, 1, 1)).TotalMilliseconds).Next(9);
-                int row = new Random((int)(DateTime.Now - new DateTime(2018, 1, 1)).TotalMilliseconds).Next(9);
+                List<int> randomData = ShuffleList(new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8 });
+
+                int col = randomData[0];
+                int row = randomData[1];
 
                 if (data[col, row] == 0)
                     continue;
@@ -75,11 +81,13 @@ namespace Sudoku
         //Získá platné řešení aktuálního SudokuBoard
         public SudokuBoard GetSolution()
         {
+            if (!IsValid())
+                return null;
+
             if (IsSolved())
                 return this;
 
-            if (solution == null)
-                SolveBoard(this);
+            SolveBoard(this);
 
             if (solution == null)
                 return null;
@@ -173,13 +181,21 @@ namespace Sudoku
             return ShuffleList(possible);
         }
 
+        int seed = -1;
         private List<int> ShuffleList(List<int> list)
         {
             List<int> result = new List<int>();
             int originalCount = list.Count;
+
+            if (seed == -1)
+                seed = DateTime.Now.Millisecond;
+            else
+                seed++;
+
+            Random random = new Random(seed);
             while (result.Count < originalCount)
             {
-                int randomIndex = new Random((int)(DateTime.Now - new DateTime(2018, 1, 1)).TotalMilliseconds).Next(list.Count);
+                int randomIndex = random.Next(list.Count);
                 result.Add(list[randomIndex]);
                 list.RemoveAt(randomIndex);
             }
@@ -345,7 +361,6 @@ namespace Sudoku
 
                 gameForm.originalBoard = board.Clone();
                 gameForm.board = board;
-                gameForm.solution = gameForm.board.GetSolution();
 
                 //Načtení uložených tahů
                 string[] previousTahy = reader.ReadLine().Trim().Split(':');
