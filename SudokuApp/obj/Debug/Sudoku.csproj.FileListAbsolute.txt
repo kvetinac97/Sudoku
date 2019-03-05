@@ -1,6 +1,7 @@
 C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\bin\Debug\Sudoku.exe.config
 C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\bin\Debug\Sudoku.exe
 C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\bin\Debug\Sudoku.pdb
+C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\obj\Debug\Sudoku.csprojAssemblyReference.cache
 C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\obj\Debug\Sudoku.GameForm.resources
 C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\obj\Debug\Sudoku.IntroductionForm.resources
 C:\Users\Kvetinac97\Documents\Visual Studio 2017\Projects\SudokuApp\SudokuApp\obj\Debug\Sudoku.Properties.Resources.resources

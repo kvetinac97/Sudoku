@@ -55,9 +55,13 @@ namespace Sudoku
             int cut = 0;
             int recursionTimes = 0;
 
-            while (cut < number && recursionTimes < 100)
+            while (cut < number)
             {
+                if (recursionTimes >= 10 + number)
+                    break;
+
                 recursionTimes++;
+                Console.WriteLine(recursionTimes); //sync main thread
                 List<int> randomData = ShuffleList(new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8 });
 
                 int col = randomData[0];

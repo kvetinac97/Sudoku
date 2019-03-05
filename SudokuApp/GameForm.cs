@@ -34,6 +34,32 @@ namespace Sudoku
             if (selectedField.X == -1 && selectedField.Y == -1)
                 selectedField = board.FirstEmpty();
 
+            for (int gridCol = 0; gridCol < 3; gridCol++)
+            {
+                for (int gridRow = 0; gridRow < 3; gridRow++)
+                {
+                    TableLayoutPanel panel = new TableLayoutPanel();
+                    panel.Name = "Grid_" + gridCol + "_" + gridRow;
+                    panel.RowCount = 3;
+                    panel.ColumnCount = 3;
+
+                    panel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33f));
+                    panel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33f));
+                    panel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.33f));
+
+                    panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33f));
+                    panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33f));
+                    panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33f));
+
+                    panel.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+                    panel.Width = sudokuBoard.Width / 3;
+                    panel.Height = sudokuBoard.Height / 3;
+
+                    panel.CellPaint += OnCellPaint;
+                    sudokuBoard.Controls.Add(panel, gridCol, gridRow);
+                }
+            }
+
             //Načtení pole z dat
             for (int col = 0; col < 9; col++)
             {
@@ -57,7 +83,9 @@ namespace Sudoku
                     if (col == selectedField.X && row == selectedField.Y)
                         label.BackColor = Color.Yellow;
 
-                    sudokuBoard.Controls.Add(label, col, row);
+                    int gridCol = col / 3;
+                    int gridRow = row / 3;
+                    ((TableLayoutPanel) sudokuBoard.Controls["Grid_" + gridCol + "_" + gridRow]).Controls.Add(label, col % 3, row % 3);
                 }
             }
 
@@ -66,7 +94,16 @@ namespace Sudoku
         }
         private void SudokuBoard_CellPaint(object sender, TableLayoutCellPaintEventArgs e)
         {
-            if (e.Column != selectedField.X || e.Row != selectedField.Y)
+            e.Graphics.FillRectangle(new SolidBrush(Color.Black), e.CellBounds);
+        }
+        private void OnCellPaint(object sender, TableLayoutCellPaintEventArgs e)
+        {
+            string[] GridColRow = ((Control)sender).Name.Split('_');
+            if (int.Parse(GridColRow[1]) != selectedField.X / 3 ||
+                int.Parse(GridColRow[2]) != selectedField.Y / 3)
+                return;
+
+            if (selectedField.X % 3 != e.Column || selectedField.Y % 3 != e.Row)
                 return;
 
             e.Graphics.FillRectangle(new SolidBrush(Color.Yellow), e.CellBounds);
@@ -85,23 +122,15 @@ namespace Sudoku
                 return;
 
             //Najde označené místo a zruší na něm označení
-            Control previous = sudokuBoard.Controls[selectedField.X + "_" + selectedField.Y];
-            previous.BackColor = Color.FromKnownColor(KnownColor.Control);
-
-            Rectangle rect = previous.Bounds;
-            rect.Inflate(3, 3);
-            sudokuBoard.Invalidate(rect);
+            GetLabelControl(selectedField.X, selectedField.Y).BackColor = Color.FromKnownColor(KnownColor.Control);
+            sudokuBoard.Controls["Grid_" + selectedField.X / 3 + "_" + selectedField.Y / 3].Invalidate();
 
             //Nastaví nové pole
             selectedField = new Point(col, row);
 
             //Označí nové místo
-            Control next = sudokuBoard.Controls[selectedField.X + "_" + selectedField.Y];
-            next.BackColor = Color.Yellow;
-
-            Rectangle rect2 = next.Bounds;
-            rect2.Inflate(3, 3);
-            sudokuBoard.Invalidate(rect2);
+            GetLabelControl(selectedField.X, selectedField.Y).BackColor = Color.Yellow;
+            sudokuBoard.Controls["Grid_" + selectedField.X / 3 + "_" + selectedField.Y / 3].Invalidate();
         }
 
         // INTERNAL | Vykonání tahu
@@ -110,11 +139,17 @@ namespace Sudoku
             SudokuTah tah = new SudokuTah(row * 9 + col, board.GetValue(col, row), value);
             previous.Push(tah);
 
-            sudokuBoard.Controls[col + "_" + row].Text = ("" + value).Replace("0", "");
+            GetLabelControl(col, row).Text = ("" + value).Replace("0", "");
             board.SetValue(col, row, value);
 
             if (redraw)
                 RedrawFields();
+        }
+        // INTERNAL | Získání Controlu podle sloupce a řádku
+        private Label GetLabelControl(int col, int row)
+        {
+            return (Label) sudokuBoard.Controls["Grid_" + (col / 3) + "_" + (row / 3)]
+                .Controls[col + "_" + row];
         }
 
         //Překreslení pole
@@ -137,8 +172,8 @@ namespace Sudoku
                     if (used.ContainsKey(num))
                     {
                         Point usedPoint = used[num];
-                        sudokuBoard.Controls[usedPoint.X + "_" + usedPoint.Y].ForeColor = Color.Red;
-                        sudokuBoard.Controls[col + "_" + row].ForeColor = Color.Red;
+                        GetLabelControl(usedPoint.X, usedPoint.Y).ForeColor = Color.Red;
+                        GetLabelControl(col, row).ForeColor = Color.Red;
 
                         wrong.Add(usedPoint.X + "_" + usedPoint.Y);
                         wrong.Add(col + "_" + row);
@@ -148,7 +183,7 @@ namespace Sudoku
                         used.Add(num, new Point(col, row));
 
                         if (!wrong.Contains(col + "_" + row))
-                            sudokuBoard.Controls[col + "_" + row].ForeColor = originalBoard.GetValue(col, row) == 0 ? Color.Blue : Color.Black;
+                            GetLabelControl(col, row).ForeColor = originalBoard.GetValue(col, row) == 0 ? Color.Blue : Color.Black;
                     }
                 }
             }
@@ -167,8 +202,8 @@ namespace Sudoku
                     if (used.ContainsKey(num))
                     {
                         Point usedPoint = used[num];
-                        sudokuBoard.Controls[usedPoint.X + "_" + usedPoint.Y].ForeColor = Color.Red;
-                        sudokuBoard.Controls[col + "_" + row].ForeColor = Color.Red;
+                        GetLabelControl(usedPoint.X, usedPoint.Y).ForeColor = Color.Red;
+                        GetLabelControl(col, row).ForeColor = Color.Red;
 
                         wrong.Add(usedPoint.X + "_" + usedPoint.Y);
                         wrong.Add(col + "_" + row);
@@ -178,7 +213,7 @@ namespace Sudoku
                         used.Add(num, new Point(col, row));
 
                         if (!wrong.Contains(col + "_" + row))
-                            sudokuBoard.Controls[col + "_" + row].ForeColor = originalBoard.GetValue(col, row) == 0 ? Color.Blue : Color.Black;
+                            GetLabelControl(col, row).ForeColor = originalBoard.GetValue(col, row) == 0 ? Color.Blue : Color.Black;
                     }
                 }
             }
@@ -201,8 +236,8 @@ namespace Sudoku
                             if (used.ContainsKey(num))
                             {
                                 Point usedPoint = used[num];
-                                sudokuBoard.Controls[usedPoint.X + "_" + usedPoint.Y].ForeColor = Color.Red;
-                                sudokuBoard.Controls[col + "_" + row].ForeColor = Color.Red;
+                                GetLabelControl(usedPoint.X, usedPoint.Y).ForeColor = Color.Red;
+                                GetLabelControl(col, row).ForeColor = Color.Red;
 
                                 wrong.Add(usedPoint.X + "_" + usedPoint.Y);
                                 wrong.Add(col + "_" + row);
@@ -212,7 +247,7 @@ namespace Sudoku
                                 used.Add(num, new Point(col, row));
 
                                 if (!wrong.Contains(col + "_" + row))
-                                    sudokuBoard.Controls[col + "_" + row].ForeColor = originalBoard.GetValue(col, row) == 0 ? Color.Blue : Color.Black;
+                                    GetLabelControl(col, row).ForeColor = originalBoard.GetValue(col, row) == 0 ? Color.Blue : Color.Black;
                             }
                         }
                     }
@@ -222,7 +257,7 @@ namespace Sudoku
             if (board.IsSolved())
             {
                 if (selectedField.X != -1 && selectedField.Y != 1)
-                    sudokuBoard.Controls[selectedField.X + "_" + selectedField.Y].BackColor
+                    GetLabelControl(selectedField.X, selectedField.Y).BackColor
                         = Color.FromKnownColor(KnownColor.Control);
 
                 selectedField = new Point(-1, -1);
