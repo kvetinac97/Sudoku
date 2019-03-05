@@ -55,7 +55,7 @@ namespace Sudoku
             int cut = 0;
             int recursionTimes = 0;
 
-            while (cut < number && recursionTimes < 1000)
+            while (cut < number && recursionTimes < 100)
             {
                 recursionTimes++;
                 List<int> randomData = ShuffleList(new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8 });
@@ -321,8 +321,8 @@ namespace Sudoku
         {
             string text = "";
 
-            for (int col = 0; col < 9; col++)
-                for (int row = 0; row < 9; row++)
+            for (int row = 0; row < 9; row++)
+                for (int col = 0; col < 9; col++)
                     text += data[col, row].ToString();
 
             return text;
@@ -342,35 +342,44 @@ namespace Sudoku
             using (StreamReader reader = new StreamReader(new FileStream(saveFile, FileMode.Open)))
             {
                 gameForm.name = reader.ReadLine().Trim();
-                gameForm.timePlaying = int.Parse(reader.ReadLine().Trim());
-
                 int selectedIndex = int.Parse(reader.ReadLine().Trim());
                 gameForm.selectedField = new Point(selectedIndex % 9, selectedIndex / 9);
 
+                SudokuBoard originalBoard = new SudokuBoard();
                 string sudokuText = reader.ReadLine().Trim();
+                int col = 0, row = 0;
+
+                foreach (char letter in sudokuText)
+                {
+                    int val = int.Parse(letter.ToString());
+                    originalBoard.SetValue(col++, row, val);
+
+                    if (col == 9)
+                    {
+                        col = 0;
+                        row++;
+                    }
+                }
+
+                gameForm.originalBoard = originalBoard.Clone();
 
                 SudokuBoard board = new SudokuBoard();
-                for (int i = 0; i < 81; i++)
-                {
-                    if (sudokuText[i] == '0')
-                        continue;
+                string boardText = reader.ReadLine().Trim();
+                int bcol = 0, brow = 0;
 
-                    board.SetValue(i % 9, i / 9, int.Parse(sudokuText[i].ToString()));
-                    i++;
+                foreach (char bletter in boardText)
+                {
+                    int bval = int.Parse(bletter.ToString());
+                    board.SetValue(bcol++, brow, bval);
+
+                    if (bcol == 9)
+                    {
+                        bcol = 0;
+                        brow++;
+                    }
                 }
 
-                gameForm.originalBoard = board.Clone();
-                gameForm.board = board;
-
-                //Načtení uložených tahů
-                string[] previousTahy = reader.ReadLine().Trim().Split(':');
-
-                foreach (string previousTah in previousTahy)
-                {
-                    SudokuTah tah = SudokuTah.FromString(previousTah.Split('-'));
-                    gameForm.previous.Push(tah);
-                    gameForm.board.SetValue(tah.GetIndex() % 9, tah.GetIndex() / 9, tah.GetNext());
-                }
+                gameForm.board = board.Clone();
 
                 reader.Close();
             }

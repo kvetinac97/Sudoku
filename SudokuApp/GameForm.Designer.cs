@@ -30,11 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameForm));
             this.sudokuBoard = new System.Windows.Forms.TableLayoutPanel();
-            this.timeLabel = new System.Windows.Forms.Label();
-            this.timeElapsed = new System.Windows.Forms.Label();
             this.stepBack = new System.Windows.Forms.Button();
             this.stepForward = new System.Windows.Forms.Button();
-            this.hintButton = new System.Windows.Forms.Button();
             this.autoSolveButton = new System.Windows.Forms.Button();
             this.endGameButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -52,7 +49,7 @@
             this.sudokuBoard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.sudokuBoard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.sudokuBoard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-            this.sudokuBoard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 129F));
+            this.sudokuBoard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130F));
             this.sudokuBoard.Location = new System.Drawing.Point(34, 23);
             this.sudokuBoard.Margin = new System.Windows.Forms.Padding(6);
             this.sudokuBoard.Name = "sudokuBoard";
@@ -69,29 +66,6 @@
             this.sudokuBoard.Size = new System.Drawing.Size(748, 715);
             this.sudokuBoard.TabIndex = 0;
             this.sudokuBoard.CellPaint += new System.Windows.Forms.TableLayoutCellPaintEventHandler(this.SudokuBoard_CellPaint);
-            // 
-            // timeLabel
-            // 
-            this.timeLabel.AutoSize = true;
-            this.timeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.timeLabel.Location = new System.Drawing.Point(828, 69);
-            this.timeLabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.timeLabel.Name = "timeLabel";
-            this.timeLabel.Size = new System.Drawing.Size(328, 46);
-            this.timeLabel.TabIndex = 1;
-            this.timeLabel.Text = "Čas od spuštění: ";
-            this.timeLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // timeElapsed
-            // 
-            this.timeElapsed.AutoSize = true;
-            this.timeElapsed.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.timeElapsed.Location = new System.Drawing.Point(1242, 69);
-            this.timeElapsed.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.timeElapsed.Name = "timeElapsed";
-            this.timeElapsed.Size = new System.Drawing.Size(119, 46);
-            this.timeElapsed.TabIndex = 2;
-            this.timeElapsed.Text = "00:00";
             // 
             // stepBack
             // 
@@ -119,23 +93,10 @@
             this.stepForward.Click += new System.EventHandler(this.StepForward);
             this.stepForward.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KlavesaStisknuta);
             // 
-            // hintButton
-            // 
-            this.hintButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.hintButton.Location = new System.Drawing.Point(838, 412);
-            this.hintButton.Margin = new System.Windows.Forms.Padding(6);
-            this.hintButton.Name = "hintButton";
-            this.hintButton.Size = new System.Drawing.Size(528, 75);
-            this.hintButton.TabIndex = 5;
-            this.hintButton.Text = "NÁPOVĚDA";
-            this.hintButton.UseVisualStyleBackColor = true;
-            this.hintButton.Click += new System.EventHandler(this.Napoveda);
-            this.hintButton.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KlavesaStisknuta);
-            // 
             // autoSolveButton
             // 
             this.autoSolveButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.autoSolveButton.Location = new System.Drawing.Point(838, 500);
+            this.autoSolveButton.Location = new System.Drawing.Point(838, 398);
             this.autoSolveButton.Margin = new System.Windows.Forms.Padding(6);
             this.autoSolveButton.Name = "autoSolveButton";
             this.autoSolveButton.Size = new System.Drawing.Size(528, 73);
@@ -148,7 +109,7 @@
             // endGameButton
             // 
             this.endGameButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.endGameButton.Location = new System.Drawing.Point(838, 585);
+            this.endGameButton.Location = new System.Drawing.Point(838, 483);
             this.endGameButton.Margin = new System.Windows.Forms.Padding(6);
             this.endGameButton.Name = "endGameButton";
             this.endGameButton.Size = new System.Drawing.Size(528, 73);
@@ -177,18 +138,15 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.endGameButton);
             this.Controls.Add(this.autoSolveButton);
-            this.Controls.Add(this.hintButton);
             this.Controls.Add(this.stepForward);
             this.Controls.Add(this.stepBack);
-            this.Controls.Add(this.timeElapsed);
-            this.Controls.Add(this.timeLabel);
             this.Controls.Add(this.sudokuBoard);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
             this.Name = "GameForm";
-            this.Text = "Hra - ";
+            this.Text = "s";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CloseGameForm);
             this.Load += new System.EventHandler(this.SudokuApp_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KlavesaStisknuta);
@@ -200,11 +158,8 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel sudokuBoard;
-        private System.Windows.Forms.Label timeLabel;
-        private System.Windows.Forms.Label timeElapsed;
         private System.Windows.Forms.Button stepBack;
         private System.Windows.Forms.Button stepForward;
-        private System.Windows.Forms.Button hintButton;
         private System.Windows.Forms.Button autoSolveButton;
         private System.Windows.Forms.Button endGameButton;
         private System.Windows.Forms.Label label1;

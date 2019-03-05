@@ -111,7 +111,6 @@ namespace Sudoku
                         goto default;
                     default:
                         gameForm.board = SudokuBoard.Create(gameDifficulty);
-                        MessageBox.Show(gameForm.board.ToString());
                         break;
                 }
 

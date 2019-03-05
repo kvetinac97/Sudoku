@@ -12,7 +12,6 @@ namespace Sudoku
         // === PROMĚNNÉ ===
         public string name;
         private bool onMainThread;
-        public int timePlaying = 0;
 
         public SudokuBoard originalBoard, board;
         public Point selectedField;
@@ -103,50 +102,6 @@ namespace Sudoku
             Rectangle rect2 = next.Bounds;
             rect2.Inflate(3, 3);
             sudokuBoard.Invalidate(rect2);
-        }
-
-        //Použití nápovědy
-        private void Napoveda(object sender, EventArgs e)
-        {
-            Point volny = board.FindLowestPossibilities(false);
-            if (volny.X == -1 || volny.Y == -1)
-            {
-                MessageBox.Show("Sudoku je již vyřešeno.");
-                return;
-            }
-
-            SudokuBoard solution = board.GetSolution();
-            if (solution == null)
-            {
-                MessageBox.Show("Toto Sudoku je neplatné nebo nemá řešení.");
-                return;
-            }
-
-            PrekliknutiPole(sudokuBoard.Controls[volny.X + "_" + volny.Y], null);
-            VykonejTah(volny.X, volny.Y, solution.GetValue(volny.X, volny.Y));
-            MessageBox.Show("Nápověda byla využita.");
-        }
-
-        //Zobrazení řešení Sudoku
-        private void VyresitSudoku(object sender, EventArgs e)
-        {
-            SudokuBoard solution = board.GetSolution();
-            if (solution == null)
-            {
-                MessageBox.Show("Toto Sudoku je neplatné nebo nemá řešení.");
-                return;
-            }
-
-            for (int col = 0; col < 9; col++)
-            {
-                for (int row = 0; row < 9; row++)
-                {
-                    if (originalBoard.GetValue(col, row) == 0)
-                        VykonejTah(col, row, solution.GetValue(col, row), false);
-                }
-            }
-
-            RedrawFields();
         }
 
         // INTERNAL | Vykonání tahu
@@ -274,8 +229,6 @@ namespace Sudoku
 
                 stepBack.Enabled = false;
                 stepForward.Enabled = false;
-                autoSolveButton.Enabled = false;
-                hintButton.Enabled = false;
 
                 if (!firstStart)
                     MessageBox.Show("Gratulujeme! Sudoku bylo vyřešeno.");
@@ -371,9 +324,12 @@ namespace Sudoku
         private void ClickCloseGameForm(object sender, EventArgs e)
         {
             clickedClose = true;
-
+            
             if (onMainThread)
+            {
+                SaveGameFile();
                 Hide();
+            }
             else
                 Close();
 
@@ -407,17 +363,10 @@ namespace Sudoku
             using (StreamWriter writer = new StreamWriter(new FileStream(saveFile, FileMode.Create)))
             {
                 writer.WriteLine(name);
-                writer.WriteLine("" + timePlaying);
                 writer.WriteLine("" + (selectedField.Y * 9 + selectedField.X));
+
                 writer.WriteLine(originalBoard.ToString());
-                
-                //Uložení tahů
-                string previousTahy = "";
-                foreach (SudokuTah tah in previous)
-                {
-                    previousTahy += tah.ToString() + ":";
-                }
-                writer.WriteLine(previousTahy.Substring(0, previousTahy.Length - 1));
+                writer.WriteLine(board.ToString());
 
                 writer.Flush();
                 writer.Close();
